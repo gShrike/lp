@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import LessonNav from './components/LessonNav'
 import lessonData from './data/create-react-app-intro'
+import { Route } from 'react-router-dom'
+
+import { Timer } from './components/EverybodyWrites'
 
 class App extends Component {
   render() {
@@ -17,7 +19,7 @@ class App extends Component {
         <section className="min-content">
           <LessonNav lesson={lessonData} />
 
-
+          <Timer time=":05" onTimerEnd={() => alert(`TIMES UP SUCKERS!`)} />
         </section>
         <section className="min-content">
           <LessonNav lesson={lessonData} activeIndex={0} />
