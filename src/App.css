@@ -1,0 +1,26 @@
+/* Dark menu hovers */
+.is-dark .menu-list a:hover,
+.is-dark .menu-list a.is-active { color: #363636; background-color: #f5f5f5; }
+
+/* Dark menu active hovers */
+.is-dark .menu-list a.is-active,
+.is-dark .menu-list a.is-active:hover {
+  color: #363636; background-color: #ddd; font-style: italic;
+}
+
+/* Dark menu code colors */
+code { background-color: transparent; padding: 0; }
+.is-dark code { color: goldenrod }
+.is-dark a:hover code,
+.is-dark a.is-active code { color: black }
+/* Menu link spacing */
+.menu-list a { display: block; margin-bottom: 1px; float: left; clear: left }
+.menu-list:after { content: ''; display: table; clear: both; }
+/* Menu muting when objective selected */
+.menu-list.is-muted { opacity: 0.8 }
+
+/* Don't indent menus */
+menu {padding: 0;}
+
+.is-strikeout { text-decoration: line-through; }
+.min-content { min-height: 100vh; }
