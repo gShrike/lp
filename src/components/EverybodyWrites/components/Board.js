@@ -4,7 +4,6 @@ import * as Components from '../index'
 class Board extends React.Component {
 
   render() {
-    console.log('Board', this.props)
     return (
       <section className="section">
         {this.props.cfus.map((cfu, i) => {

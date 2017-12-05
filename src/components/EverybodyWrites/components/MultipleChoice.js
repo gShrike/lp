@@ -10,7 +10,6 @@ class MultipleChoice extends React.Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
 
     this.state = {
       configured: !!props.options || false

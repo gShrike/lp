@@ -26,7 +26,7 @@ class LessonNav extends React.Component {
   }
 
   getPageAnchor() {
-    const { lesson, activeIndex, review } = this.props
+    const { activeIndex, review } = this.props
 
     if (review) {
       return `end`

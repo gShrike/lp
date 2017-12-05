@@ -48,7 +48,7 @@ export default {
         },
         {
           title: `Where will <code>create-react-app</code> create the new app?`,
-          type: `MultipleChoices`,
+          type: `MultipleChoice`,
           config: {
             type: `single`, options: [
               { name: `In the <code>~/projects</code> folder` },
