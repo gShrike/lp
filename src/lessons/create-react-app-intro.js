@@ -1,5 +1,7 @@
 export default {
 
+  id: `create-react-app-intro`,
+
   name: `Create React App Intro`,
 
   objectives: [

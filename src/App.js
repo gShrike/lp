@@ -1,13 +1,21 @@
-/* globals firebase, firebaseui */
-import React, { Component } from 'react';
-import './App.css';
-import LessonNav from './components/LessonNav'
-import lessonData from './data/create-react-app-intro'
-// import { Route } from 'react-router-dom'
-
-import { Board, Timer, MultipleChoice } from './components/EverybodyWrites'
+/* globals firebase */
+import React, { Component } from 'react'
+import './App.css'
+import { Route } from 'react-router-dom'
+import Lesson from './components/Lesson'
+import LessonList from './components/LessonList'
 
 class App extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      loading: true,
+      loggedIn: null
+    }
+  }
+
   componentDidMount() {
     window.firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -15,102 +23,71 @@ class App extends Component {
       databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL
     })
 
-    // FirebaseUI config.
-    var uiConfig = {
-      signInSuccessUrl: '/app',
-      signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        // firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        // firebase.auth.PhoneAuthProvider.PROVIDER_ID
-      ],
-      // Terms of service url.
-      tosUrl: '<your-tos-url>'
-    };
+    // Handle OAuth login redirects
+    firebase.auth().getRedirectResult().then(function(result) {
+      let token = window.localStorage.getItem(`galvanize-lp-token`)
+      let username = window.localStorage.getItem(`galvanize-lp-username`)
+
+      // If no user found and we haven't previously logged in, show login button
+      if (!result.user && (!token || !username)) {
+        this.setState({
+          loggedIn: false
+        })
+        return
+      }
+
+      // If we logged in for first time, save user information
+      if (result.credential) {
+        window.localStorage.setItem(`galvanize-lp-token`, result.credential.accessToken)
+        window.localStorage.setItem(`galvanize-lp-username`, username = result.additionalUserInfo.username)
+      }
+    }).catch(error => {
+      alert(JSON.stringify(error))
+    })
 
     firebase.auth().onAuthStateChanged((user) => {
 
-      if (!user) {
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig)
-        ////////////////////////////////////////////////
-        return
-      }
-      console.log({ user })
-      if (user) {
-        this.setState({ user })
-        // User is signed in.
-        // var displayName = user.displayName;
-        // var email = user.email;
-        // var emailVerified = user.emailVerified;
-        // var photoURL = user.photoURL;
-        // var uid = user.uid;
-        // var phoneNumber = user.phoneNumber;
-        // var providerData = user.providerData;
-        user.getIdToken().then(function(accessToken) {
-          // document.getElementById('sign-in-status').textContent = 'Signed in';
-          // document.getElementById('sign-in').textContent = 'Sign out';
-          // document.getElementById('account-details').textContent = JSON.stringify({
-          //   displayName: displayName,
-          //   email: email,
-          //   emailVerified: emailVerified,
-          //   phoneNumber: phoneNumber,
-          //   photoURL: photoURL,
-          //   uid: uid,
-          //   accessToken: accessToken,
-          //   providerData: providerData
-          // }, null, '  ');
-        });
-      } else {
-        // User is signed out.
-        // document.getElementById('sign-in-status').textContent = 'Signed out';
-        // document.getElementById('sign-in').textContent = 'Sign in';
-        // document.getElementById('account-details').textContent = 'null';
-      }
-    }, function(error) {
-      console.log(error);
-    });
+      this.setState({
+        loggedIn: !!user,
+        user,
+        loading: false
+      })
+
+    }, (error) => {
+      alert(JSON.stringify(error))
+    })
+  }
+
+  onLoginButtonClick() {
+    const provider = new firebase.auth.GithubAuthProvider()
+    // provider.addScope('read:user')
+
+    firebase.auth().signInWithRedirect(provider)
   }
 
   render() {
+    // Loading Screen
+    if (this.state.loading) {
+      return <main className="loading-screen hero is-dark">
+        <span className="fa fa-fw fa-snowflake-o fa-1x"></span>
+      </main>
+    }
+
+    // Login Screen
+    if (!this.state.loggedIn) {
+      return <main className="login-screen hero is-dark">
+        <button className="login-button button is-dark" type="button" onClick={this.onLoginButtonClick}><span className="fa fa-github"></span> Login with Github</button>
+      </main>
+    }
+
+    // Board
     return (
       <main>
-        <header className="navbar is-fixed-bottom is-dark">
-          <nav className="pagination is-large" aria-label="pagination">
-            <a className="pagination-previous" href="#start"><i className="fa fa-level-up"></i></a>
-            <a className="pagination-next" href="#end"><i className="fa fa-level-down"></i></a>
-          </nav>
-        </header>
-        {lessonData.objectives.map((objective, i) => {
-          return (
-            <section key={i} className="min-content">
-              <LessonNav lesson={lessonData} activeIndex={i} />
-              <Board {...objective} />
-            </section>
-          )
-        })}
-        <section className="min-content">
-          <LessonNav lesson={lessonData} />
-
-          <Timer time=":05" onTimerEnd={() => alert(`TIMES UP SUCKERS!`)} />
-          <MultipleChoice type="multiple" options={[
-             {name:'Yeah Dude!',value:'yeahdude'},
-             {name:'Nah Dude!',value:'nahdude'},
-           ]} />
-        </section>
-
-        <section className="min-content">
-          <LessonNav lesson={lessonData} review={true} />
-
-        </section>
+        <Route exact path="/" component={LessonList} />
+        <Route path="/lessons/:id" component={Lesson} />
       </main>
     );
   }
 }
 
-export default App;
+export default App

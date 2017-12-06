@@ -24,3 +24,25 @@ menu {padding: 0;}
 
 .is-strikeout { text-decoration: line-through; }
 .min-content { min-height: 100vh; }
+
+
+.login-screen, .loading-screen {
+  display: flex;
+  height: 100vh;
+}
+.login-screen > *, .loading-screen > * {
+  margin: auto;
+}
+.loading-screen .fa {
+  animation: fa-spin 5s infinite linear;
+}
+.login-button {
+  cursor: pointer;
+  height: auto;
+  border: solid 2px hsl(0, 0%, 96%) !important;
+}
+.login-button .fa-github {
+  font-size: 2em;
+  vertical-align: middle;
+  margin-right: 0.2em;
+}
