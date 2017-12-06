@@ -36,13 +36,19 @@ menu {padding: 0;}
 .loading-screen .fa {
   animation: fa-spin 5s infinite linear;
 }
-.login-button {
+.login-button, .account-button {
   cursor: pointer;
   height: auto;
   border: solid 2px hsl(0, 0%, 96%) !important;
 }
-.login-button .fa-github {
+.login-button .fa-github, .account-button .fa-github {
   font-size: 2em;
   vertical-align: middle;
   margin-right: 0.2em;
+}
+.account-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 1em;
 }

@@ -4,6 +4,7 @@ import './App.css'
 import { Route } from 'react-router-dom'
 import Lesson from './components/Lesson'
 import LessonList from './components/LessonList'
+import AccountButton from './components/AccountButton'
 
 class App extends Component {
 
@@ -12,7 +13,8 @@ class App extends Component {
 
     this.state = {
       loading: true,
-      loggedIn: null
+      loggedIn: null,
+      username: null
     }
   }
 
@@ -50,7 +52,8 @@ class App extends Component {
       this.setState({
         loggedIn: !!user,
         user,
-        loading: false
+        loading: false,
+        username: window.localStorage.getItem(`galvanize-lp-username`)
       })
 
     }, (error) => {
@@ -83,6 +86,7 @@ class App extends Component {
     // Board
     return (
       <main>
+        <Route path="/" component={() => <AccountButton username={this.state.username} />} />
         <Route exact path="/" component={LessonList} />
         <Route path="/lessons/:id" component={Lesson} />
       </main>
