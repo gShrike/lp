@@ -2,6 +2,7 @@ import React from 'react'
 import Lessons from '../lessons/index'
 import LessonNav from './LessonNav'
 import { Board } from './EverybodyWrites'
+// import db from '../data/db'
 
 class Lesson extends React.Component {
 
@@ -21,6 +22,10 @@ class Lesson extends React.Component {
 
 
   render() {
+    // if (this.state.lesson) {
+    //   db.createLessonPlan(this.state.lesson)
+    // }
+
     return (
       <div>
         {/* <header className="navbar is-fixed-bottom is-dark">

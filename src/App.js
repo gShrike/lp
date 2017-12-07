@@ -1,4 +1,3 @@
-/* globals firebase */
 import React, { Component } from 'react'
 import './App.css'
 import { Route } from 'react-router-dom'
@@ -19,14 +18,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    window.firebase.initializeApp({
-      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-      databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL
-    })
-
     // Handle OAuth login redirects
-    firebase.auth().getRedirectResult().then(function(result) {
+    window.firebase.auth().getRedirectResult().then(function(result) {
       let token = window.localStorage.getItem(`galvanize-lp-token`)
       let username = window.localStorage.getItem(`galvanize-lp-username`)
 
@@ -47,7 +40,7 @@ class App extends Component {
       alert(JSON.stringify(error))
     })
 
-    firebase.auth().onAuthStateChanged((user) => {
+    window.firebase.auth().onAuthStateChanged((user) => {
 
       this.setState({
         loggedIn: !!user,
@@ -62,10 +55,10 @@ class App extends Component {
   }
 
   onLoginButtonClick() {
-    const provider = new firebase.auth.GithubAuthProvider()
+    const provider = new window.firebase.auth.GithubAuthProvider()
     // provider.addScope('read:user')
 
-    firebase.auth().signInWithRedirect(provider)
+    window.firebase.auth().signInWithRedirect(provider)
   }
 
   render() {
@@ -88,7 +81,7 @@ class App extends Component {
       <main>
         <Route path="/" component={() => <AccountButton username={this.state.username} />} />
         <Route exact path="/" component={LessonList} />
-        <Route path="/lessons/:id" component={Lesson} />
+        <Route path="/lessons/:id/:lessonId" component={Lesson} />
       </main>
     );
   }
