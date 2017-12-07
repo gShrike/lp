@@ -21,17 +21,24 @@ class DB {
       const vals = snapshot.val()
       const values = []
       for (const id in vals) {
-        values.push({
-          id,
-          ...vals[id]
-        })
+        values.push(
+          createObjectWithId(id, vals[id])
+        )
       }
       return values
     })
   }
 
-  getLessonPlan() {
+  getLessonPlan(id) {
+    return fb.ref(`lessonPlans/${id}`).once('value').then(snapshot => {
+      const value = snapshot.val()
 
+      if (!value) {
+        return null
+      }
+
+      return createObjectWithId(id, value)
+    })
   }
 
   createLessonPlan(lp) {
@@ -43,6 +50,14 @@ class DB {
   }
 
 
+}
+
+// Creates a new object with an `id` property added
+function createObjectWithId(id, snapshotVal) {
+  return {
+    id,
+    ...snapshotVal
+  }
 }
 
 export default new DB()

@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Lessons from '../lessons/index'
 import db from '../data/db'
-
 
 class LessonList extends React.Component {
 
@@ -14,10 +12,8 @@ class LessonList extends React.Component {
   }
 
   async componentDidMount() {
-    const lps = await db.getLessonPlans()
-    console.log(lps)
     this.setState({
-      lessonPlans: lps
+      lessonPlans: await db.getLessonPlans()
     })
   }
 

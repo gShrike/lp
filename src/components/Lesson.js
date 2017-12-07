@@ -1,30 +1,36 @@
 import React from 'react'
-import Lessons from '../lessons/index'
 import LessonNav from './LessonNav'
 import { Board } from './EverybodyWrites'
-// import db from '../data/db'
+import db from '../data/db'
+import LoadingScreen from './LoadingScreen'
 
 class Lesson extends React.Component {
 
   constructor(props) {
     super(props)
 
-    const lessonId = props.match.params.id
-
     this.state = {
-      lesson: Lessons.find(lesson => lesson.id === lessonId)
-    }
-
-    if (!this.state.lesson) {
-      throw new Error(`Lesson ${lessonId} not found`)
+      lessonPlan: null
     }
   }
 
+  async componentDidMount() {
+    const lessonId = this.props.match.params.lessonId
+    const lessonPlan = await db.getLessonPlan(lessonId)
+
+    if (!lessonPlan) {
+      throw new Error(`Lesson Plan "${lessonId}" not found`)
+    }
+
+    this.setState({
+      lessonPlan
+    })
+  }
 
   render() {
-    // if (this.state.lesson) {
-    //   db.createLessonPlan(this.state.lesson)
-    // }
+    if (!this.state.lessonPlan) {
+      return <LoadingScreen />
+    }
 
     return (
       <div>
@@ -34,10 +40,10 @@ class Lesson extends React.Component {
             <a className="pagination-next" href="#end"><i className="fa fa-level-down"></i></a>
           </nav>
         </header> */}
-        {this.state.lesson.objectives.map((objective, i) => {
+        {this.state.lessonPlan.lesson.objectives.map((objective, i) => {
           return (
             <section key={i} className="min-content">
-              <LessonNav lesson={this.state.lesson} activeIndex={i} />
+              <LessonNav lesson={this.state.lessonPlan.lesson} activeIndex={i} />
               <Board {...objective} />
             </section>
           )
@@ -53,7 +59,7 @@ class Lesson extends React.Component {
         </section> */}
 
         <section className="min-content">
-          <LessonNav lesson={this.state.lesson} review={true} />
+          <LessonNav lesson={this.state.lessonPlan.lesson} review={true} />
 
         </section>
       </div>

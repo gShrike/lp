@@ -4,6 +4,8 @@ import { Route } from 'react-router-dom'
 import Lesson from './components/Lesson'
 import LessonList from './components/LessonList'
 import AccountButton from './components/AccountButton'
+import LoadingScreen from './components/LoadingScreen'
+import LoginScreen from './components/LoginScreen'
 
 class App extends Component {
 
@@ -40,6 +42,7 @@ class App extends Component {
       alert(JSON.stringify(error))
     })
 
+    // When a user logs in or out
     window.firebase.auth().onAuthStateChanged((user) => {
 
       this.setState({
@@ -54,26 +57,15 @@ class App extends Component {
     })
   }
 
-  onLoginButtonClick() {
-    const provider = new window.firebase.auth.GithubAuthProvider()
-    // provider.addScope('read:user')
-
-    window.firebase.auth().signInWithRedirect(provider)
-  }
-
   render() {
     // Loading Screen
     if (this.state.loading) {
-      return <main className="loading-screen hero is-dark">
-        <span className="fa fa-fw fa-snowflake-o fa-1x"></span>
-      </main>
+      return <LoadingScreen />
     }
 
     // Login Screen
     if (!this.state.loggedIn) {
-      return <main className="login-screen hero is-dark">
-        <button className="login-button button is-dark" type="button" onClick={this.onLoginButtonClick}><span className="fa fa-github"></span> Login with Github</button>
-      </main>
+      return <LoginScreen />
     }
 
     // Board
