@@ -14,6 +14,11 @@ export default {
 
   setUsername(username) {
     window.localStorage.setItem(`galvanize-lp-username`, username)
+  },
+
+  setData(data) {
+    this.setToken(data.token)
+    this.setUsername(data.username)
   }
 
 }

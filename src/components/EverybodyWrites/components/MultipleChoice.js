@@ -12,15 +12,8 @@ class MultipleChoice extends React.Component {
     super(props)
 
     this.state = {
-      configured: !!props.options || false
+      shuffledOptions: this.shuffle(props.options)
     }
-  }
-
-  setConfig(config) {
-    console.log(config)
-    this.setState({
-
-    })
   }
 
   getInputType = () => {
@@ -34,15 +27,26 @@ class MultipleChoice extends React.Component {
     }
   }
 
-  render() {
-    if (!this.state.configured) {
-      return <MultipleChoiceConfigure onSubmit={this.setConfig} />
+  shuffle(options) {
+    let array = Array.from(options)
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
+    return array
+  }
+
+  render() {
+    // We keep shuffledOptions on state so it does not change between renders
+    const options = this.props.shuffle === false ? this.props.options : this.state.shuffledOptions
+
+    const answer = this.props.options.length ? this.props.options[0].name : ``
 
     return (
       <fieldset className="section">
         <h1 className="title is-6" dangerouslySetInnerHTML={{__html:this.props.title}}></h1>
-        {this.props.options.map((option, i) => {
+        <input type="hidden" name={`${this.props.id}-answer`} value={answer} />
+        {options.map((option, i) => {
           return (
             <label key={i} style={styles.label}><input type={this.getInputType()} name={this.props.id} value={option.name} /> <span dangerouslySetInnerHTML={{__html:option.name}}></span></label>
           )
@@ -54,9 +58,8 @@ class MultipleChoice extends React.Component {
 }
 
 MultipleChoice.defaultProps = {
-  type: `radio`,
-  options: [],
-  onChange() {}
+  type: `single`,
+  options: []
 }
 
 class MultipleChoiceConfigure extends React.Component {

@@ -8,14 +8,14 @@ export default {
     {
       name: `Install <code>create-react-app</code> through CLI`,
       cfus: [
-        { type: `Timer`, config: { time: `5:00` } },
+        { type: `Timer`, config: { time: `1:00`, onEnd: `disableSubmission` } },
         {
           title: `How do we install <code>create-react-app</code> globally?`,
           type: `MultipleChoice`,
           config: {
             type: `single`, options: [
-              { name: `<code>$ npm install --g create-react-app</code>` },
               { name: `<code>$ npm install -g create-react-app</code>` },
+              { name: `<code>$ npm install --g create-react-app</code>` },
               { name: `<code>$ npm install -g create-react-app-cli</code>` },
             ]
           }
@@ -25,8 +25,8 @@ export default {
           type: `MultipleChoice`,
           config: {
             type: `single`, options: [
-              { name: `<code>$ create-react-app?</code>` },
               { name: `<code>$ which create-react-app</code>` },
+              { name: `<code>$ create-react-app?</code>` },
               { name: `<code>$ loc create-react-app</code>` },
             ]
           }
@@ -42,9 +42,9 @@ export default {
           type: `MultipleChoice`,
           config: {
             type: `single`, options: [
+              { name: `<code>$ create-react-app appName</code>` },
               { name: `<code>$ create react-app appName</code>` },
               { name: `<code>$ create-react-app --project appName</code>` },
-              { name: `<code>$ create-react-app appName</code>` },
             ]
           }
         },
@@ -53,8 +53,8 @@ export default {
           type: `MultipleChoice`,
           config: {
             type: `single`, options: [
+              { name: `In the current directory with <code>appName</code> folder` },
               { name: `In the <code>~/projects</code> folder` },
-              { name: `In the current directory with <code>appName</code> folder` }
             ]
           }
         }

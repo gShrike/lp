@@ -9,16 +9,23 @@ class Board extends React.Component {
     const formData = new FormData(this.refs.form)
     const answers = []
 
-    for (const cfu of formData.entries()) {
-       console.log(cfu[0]+ ', '+ cfu[1]);
-       answers.push({
-         student: this.props.student,
-         cfuId: cfu[0],
-         answer: cfu[1]
-       })
+    for (const [ cfuId, answer ] of formData.entries()) {
+
+      // Don't include answers
+      if (/-answer$/.test(cfuId)) {
+        continue
+      }
+
+      answers.push({
+        student: this.props.student,
+        objectiveId: this.props.id,
+        cfuId,
+        answer,
+        correct: answer === formData.get(`${cfuId}-answer`)
+      })
     }
 
-    console.log(answers)
+    console.log(...answers)
   }
 
   render() {
@@ -33,7 +40,7 @@ class Board extends React.Component {
           }
 
           return (
-            <CFU key={i} id={cfu.id} title={cfu.title} {...cfu.config} />
+            <CFU key={i} {...cfu} {...cfu.config} />
           )
         })}
         <button className="button is-primary">Submit</button>

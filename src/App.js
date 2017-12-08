@@ -7,6 +7,9 @@ import LessonList from './components/LessonList'
 import AccountButton from './components/AccountButton'
 import LoadingScreen from './components/LoadingScreen'
 import LoginScreen from './components/LoginScreen'
+// SEED
+// import lps from './lessons/index'
+// import db from './data/db'
 
 class App extends Component {
 
@@ -36,8 +39,10 @@ class App extends Component {
 
       // If we logged in for first time, save user information
       if (result.credential) {
-        account.setToken(result.credential.accessToken)
-        account.setUsername(username = result.additionalUserInfo.username)
+        account.setData({
+          token: result.credential.accessToken,
+          username: username = result.additionalUserInfo.username
+        })
       }
     }).catch(error => {
       alert(JSON.stringify(error))
@@ -52,6 +57,10 @@ class App extends Component {
         loading: false,
         username: account.getUsername()
       })
+
+      // SEED lesson plans
+      // db.createLessonPlan(lps[0])
+      // db.createLessonPlan(lps[1])
 
     }, (error) => {
       alert(JSON.stringify(error))
