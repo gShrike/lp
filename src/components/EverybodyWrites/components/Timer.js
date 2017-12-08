@@ -119,4 +119,7 @@ Timer.defaultProps = {
   onTimerEnd() {}
 }
 
+// No review for this component
+Timer.Review = () => null
+
 export default Timer

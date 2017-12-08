@@ -33,6 +33,10 @@ export default {
         alert(JSON.stringify(error))
       }
     })
+  },
+
+  isAdmin() {
+    return true
   }
 
 }

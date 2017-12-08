@@ -41,8 +41,6 @@ class Board extends React.Component {
     this.setState({
       savingAnswers: false
     })
-
-    console.log(`Answers:`, ...answers)
   }
 
   render() {

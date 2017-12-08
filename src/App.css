@@ -23,6 +23,7 @@ code { background-color: transparent; padding: 0; }
 menu {padding: 0;}
 
 .is-strikeout { text-decoration: line-through; }
+.is-padded { padding: 1rem }
 .min-content { min-height: 100vh; }
 
 

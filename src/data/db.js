@@ -24,7 +24,7 @@ class DB {
       const values = []
       for (const id in snapVals) {
         values.push(
-          createObjectWithId(id, snapVals[id])
+          formatLessonPlan(id, snapVals[id])
         )
       }
       return values
@@ -39,7 +39,7 @@ class DB {
         return null
       }
 
-      return createObjectWithId(id, value)
+      return formatLessonPlan(id, value)
     })
   }
 
@@ -70,11 +70,14 @@ class DB {
  * Helpers
  */
 
-// Creates a new object with an `id` property added
-function createObjectWithId(id, snapshotVal) {
+// Creates a new object with
+// - an `id` property added
+// - `submissions` converted to an array
+function formatLessonPlan(id, snapshotVal) {
   return {
     id,
-    ...snapshotVal
+    ...snapshotVal,
+    submissions: Object.values(snapshotVal.submissions || {}),
   }
 }
 

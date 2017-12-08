@@ -62,6 +62,36 @@ MultipleChoice.defaultProps = {
   options: []
 }
 
+class MultipleChoiceReview extends React.Component {
+
+  render() {
+    // Gather options with answers, sorted DESC
+    const options = this.props.options.map((option, i) => {
+      option.correct = i === 0 // First answer is correct answer
+      option.answers = this.props.submissions.filter(submission => submission.answer === option.name)
+      return option
+    }).sort((a, b) => a.answers.length < b.answers.length)
+
+    return (
+      <fieldset className="section">
+        <h1 className="title is-6" dangerouslySetInnerHTML={{__html:this.props.title}}></h1>
+        {options.map((option, i) => {
+          const isCorrect = option.correct ? `is-success` : `is-danger`
+          return (
+            <label key={i} style={styles.label}><span className={`tag is-rounded ${isCorrect}`}>{option.answers.length}</span> <span dangerouslySetInnerHTML={{__html:option.name}}></span></label>
+          )
+        })}
+      </fieldset>
+    )
+  }
+
+}
+
+MultipleChoiceReview.defaultProps = {
+  options: [],
+  submissions: []
+}
+
 class MultipleChoiceConfigure extends React.Component {
 
   convertTextareaToOptionsArray(contents) {
@@ -111,6 +141,7 @@ class MultipleChoiceConfigure extends React.Component {
 
 }
 
+MultipleChoice.Review = MultipleChoiceReview
 MultipleChoice.Configure = MultipleChoiceConfigure
 
 export default MultipleChoice

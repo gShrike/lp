@@ -1,6 +1,6 @@
 import React from 'react'
 import LessonNav from './LessonNav'
-import { Board } from './EverybodyWrites'
+import { Board, BoardResults } from './EverybodyWrites'
 import db from '../data/db'
 import account from '../data/account'
 import LoadingScreen from './LoadingScreen'
@@ -11,7 +11,8 @@ class Lesson extends React.Component {
     super(props)
 
     this.state = {
-      lessonPlan: null
+      lessonPlan: null,
+      resultsView: false
     }
   }
 
@@ -32,6 +33,40 @@ class Lesson extends React.Component {
     return await db.submitAnswersToLessonPlan(answers, this.state.lessonPlan.id)
   }
 
+  getSubmissionsForObjective = (objectiveId) => {
+    if (!this.state.lessonPlan || !this.state.lessonPlan.submissions) {
+      return []
+    }
+
+    return this.state.lessonPlan.submissions.filter(submission => submission.objectiveId === objectiveId)
+  }
+
+  renderBoard = (objective, objectiveSubmissions = []) => {
+    if (this.state.resultsView) {
+      return <BoardResults {...objective} submissions={objectiveSubmissions} />
+    }
+
+    return <Board {...objective} student={account.getUsername()} onAnswersSubmit={this.onAnswersSubmit} />
+  }
+
+  toggleBoardResults = () => {
+    this.setState({
+      resultsView: !this.state.resultsView
+    })
+  }
+
+  renderToggleResultsButton(objective, objectiveSubmissions = []) {
+    if (account.isAdmin() && objectiveSubmissions.length) {
+      return (
+        <div className="buttons is-centered is-padded is-marginless">
+          <button onClick={this.toggleBoardResults} className="button is-info is-outlined"><span className="fa fa-pie-chart"></span> Toggle Results</button>
+        </div>
+      )
+    }
+
+    return null
+  }
+
   render() {
     if (!this.state.lessonPlan) {
       return <LoadingScreen />
@@ -45,27 +80,22 @@ class Lesson extends React.Component {
             <a className="pagination-next" href="#end"><i className="fa fa-level-down"></i></a>
           </nav>
         </header> */}
+
         {this.state.lessonPlan.lesson.objectives.map((objective, i) => {
+          const objectiveSubmissions = this.getSubmissionsForObjective(objective.id)
+
           return (
             <section key={i} className="min-content">
               <LessonNav lesson={this.state.lessonPlan.lesson} activeIndex={i} />
-              <Board {...objective} student={account.getUsername()} onAnswersSubmit={this.onAnswersSubmit} />
+              {this.renderToggleResultsButton(objective, objectiveSubmissions)}
+              {this.renderBoard(objective, objectiveSubmissions)}
             </section>
           )
         })}
-        {/* <section className="min-content">
-          <LessonNav lesson={this.state.lesson} />
-
-          <Timer time=":05" onTimerEnd={() => alert(`TIMES UP SUCKERS!`)} />
-          <MultipleChoice type="multiple" options={[
-             {name:'Yeah Dude!',value:'yeahdude'},
-             {name:'Nah Dude!',value:'nahdude'},
-           ]} />
-        </section> */}
 
         <section className="min-content">
           <LessonNav lesson={this.state.lessonPlan.lesson} review={true} />
-
+          {/* Future result information */}
         </section>
       </div>
     )
