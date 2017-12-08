@@ -52,3 +52,6 @@ menu {padding: 0;}
   right: 0;
   margin: 1em;
 }
+fieldset {
+  border: 0;
+}

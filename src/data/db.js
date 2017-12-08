@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid'
+
 window.firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -43,10 +45,14 @@ class DB {
 
   createLessonPlan(lp) {
     fb.ref(`lessonPlans`).push().set({
-      lesson: lp,
+      lesson: createLessonPlanWithId(lp),
       attendance: [],
       submissions: []
     })
+  }
+
+  submitAnswers() {
+
   }
 
 
@@ -57,6 +63,23 @@ function createObjectWithId(id, snapshotVal) {
   return {
     id,
     ...snapshotVal
+  }
+}
+
+// Create a new lesson plan with ids in place
+function createLessonPlanWithId(lp) {
+  return {
+    id: uuid(),
+    ...lp,
+    objectives: lp.objectives.map(objective => {
+      objective.id = uuid()
+      objective.cfus = objective.cfus.map(cfu => {
+        cfu.id = uuid()
+        return cfu
+      })
+      return objective
+    })
+
   }
 }
 

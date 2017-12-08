@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import { Route } from 'react-router-dom'
+import account from './data/account'
 import Lesson from './components/Lesson'
 import LessonList from './components/LessonList'
 import AccountButton from './components/AccountButton'
@@ -22,8 +23,8 @@ class App extends Component {
   componentDidMount() {
     // Handle OAuth login redirects
     window.firebase.auth().getRedirectResult().then(function(result) {
-      let token = window.localStorage.getItem(`galvanize-lp-token`)
-      let username = window.localStorage.getItem(`galvanize-lp-username`)
+      let token = account.getToken()
+      let username = account.getUsername()
 
       // If no user found and we haven't previously logged in, show login button
       if (!result.user && (!token || !username)) {
@@ -35,8 +36,8 @@ class App extends Component {
 
       // If we logged in for first time, save user information
       if (result.credential) {
-        window.localStorage.setItem(`galvanize-lp-token`, result.credential.accessToken)
-        window.localStorage.setItem(`galvanize-lp-username`, username = result.additionalUserInfo.username)
+        account.setToken(result.credential.accessToken)
+        account.setUsername(username = result.additionalUserInfo.username)
       }
     }).catch(error => {
       alert(JSON.stringify(error))
@@ -49,7 +50,7 @@ class App extends Component {
         loggedIn: !!user,
         user,
         loading: false,
-        username: window.localStorage.getItem(`galvanize-lp-username`)
+        username: account.getUsername()
       })
 
     }, (error) => {

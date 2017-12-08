@@ -104,12 +104,12 @@ class Timer extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.toggleStatus}>
+      <fieldset onSubmit={this.toggleStatus}>
         <input ref="timer" readOnly={this.state.isCounting} defaultValue={this.state.time} style={styles.input} />
         <button onClick={this.toggleStatus} style={styles.button}>
           <span className={this.getStatusIcon()}></span>
         </button>
-      </form>
+      </fieldset>
     )
   }
 

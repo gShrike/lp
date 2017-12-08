@@ -1,6 +1,6 @@
 export default {
 
-  id: `create-react-app-intro`,
+  uri: `create-react-app-intro`,
 
   name: `Create React App Intro`,
 
@@ -61,10 +61,12 @@ export default {
       ]
     },
     {
-      name: `Describe the structure of a <code>create-react-app</code> application`
+      name: `Describe the structure of a <code>create-react-app</code> application`,
+      cfus: []
     },
     {
-      name: `Add a new component to our app`
+      name: `Add a new component to our app`,
+      cfus: []
     },
   ]
 

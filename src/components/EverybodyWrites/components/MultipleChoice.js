@@ -40,14 +40,14 @@ class MultipleChoice extends React.Component {
     }
 
     return (
-      <form className="section">
+      <fieldset className="section">
         <h1 className="title is-6" dangerouslySetInnerHTML={{__html:this.props.title}}></h1>
         {this.props.options.map((option, i) => {
           return (
-            <label key={i} style={styles.label}><input type={this.getInputType()} name="value" value={option.value} /> <span dangerouslySetInnerHTML={{__html:option.name}}></span></label>
+            <label key={i} style={styles.label}><input type={this.getInputType()} name={this.props.id} value={option.name} /> <span dangerouslySetInnerHTML={{__html:option.name}}></span></label>
           )
         })}
-      </form>
+      </fieldset>
     )
   }
 
@@ -55,7 +55,8 @@ class MultipleChoice extends React.Component {
 
 MultipleChoice.defaultProps = {
   type: `radio`,
-  options: []
+  options: [],
+  onChange() {}
 }
 
 class MultipleChoiceConfigure extends React.Component {

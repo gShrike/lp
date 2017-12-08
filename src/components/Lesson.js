@@ -2,6 +2,7 @@ import React from 'react'
 import LessonNav from './LessonNav'
 import { Board } from './EverybodyWrites'
 import db from '../data/db'
+import account from '../data/account'
 import LoadingScreen from './LoadingScreen'
 
 class Lesson extends React.Component {
@@ -44,7 +45,7 @@ class Lesson extends React.Component {
           return (
             <section key={i} className="min-content">
               <LessonNav lesson={this.state.lessonPlan.lesson} activeIndex={i} />
-              <Board {...objective} />
+              <Board {...objective} student={account.getUsername()} />
             </section>
           )
         })}

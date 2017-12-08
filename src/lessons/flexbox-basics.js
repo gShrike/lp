@@ -1,6 +1,6 @@
 export default {
 
-  id: `flexbox-basics`,
+  uri: `flexbox-basics`,
 
   name: `Flexbox Basics`,
 

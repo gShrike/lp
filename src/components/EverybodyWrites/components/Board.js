@@ -3,9 +3,27 @@ import * as Components from '../index'
 
 class Board extends React.Component {
 
+  onSubmit = (e) => {
+    e.preventDefault()
+
+    const formData = new FormData(this.refs.form)
+    const answers = []
+
+    for (const cfu of formData.entries()) {
+       console.log(cfu[0]+ ', '+ cfu[1]);
+       answers.push({
+         student: this.props.student,
+         cfuId: cfu[0],
+         answer: cfu[1]
+       })
+    }
+
+    console.log(answers)
+  }
+
   render() {
     return (
-      <section className="section">
+      <form ref="form" className="section" onSubmit={this.onSubmit}>
         {this.props.cfus.map((cfu, i) => {
           const CFU = Components[cfu.type]
 
@@ -15,10 +33,11 @@ class Board extends React.Component {
           }
 
           return (
-            <CFU key={i} title={cfu.title} {...cfu.config} />
+            <CFU key={i} id={cfu.id} title={cfu.title} {...cfu.config} />
           )
         })}
-      </section>
+        <button className="button is-primary">Submit</button>
+      </form>
     )
   }
 
