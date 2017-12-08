@@ -1,6 +1,6 @@
-# Galvanize LP
+# LP
 
-> Galvanize Lesson Planner
+> Lesson Planner
 
 ## Adding a Lesson
 

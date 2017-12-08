@@ -18,14 +18,13 @@ class App extends Component {
 
     this.state = {
       loading: true,
-      loggedIn: null,
-      username: null
+      loggedIn: null
     }
   }
 
   componentDidMount() {
     // Handle OAuth login redirects
-    window.firebase.auth().getRedirectResult().then(function(result) {
+    window.firebase.auth().getRedirectResult().then(result => {
       let token = account.getToken()
       let username = account.getUsername()
 
@@ -41,11 +40,13 @@ class App extends Component {
       if (result.credential) {
         account.setData({
           token: result.credential.accessToken,
-          username: username = result.additionalUserInfo.username
+          username: result.additionalUserInfo.username
         })
       }
     }).catch(error => {
-      alert(JSON.stringify(error))
+      if (error.message) {
+        alert(JSON.stringify(error))
+      }
     })
 
     // When a user logs in or out
@@ -54,8 +55,7 @@ class App extends Component {
       this.setState({
         loggedIn: !!user,
         user,
-        loading: false,
-        username: account.getUsername()
+        loading: false
       })
 
       // SEED lesson plans
@@ -63,7 +63,9 @@ class App extends Component {
       // db.createLessonPlan(lps[1])
 
     }, (error) => {
-      alert(JSON.stringify(error))
+      if (error.message) {
+        alert(JSON.stringify(error))
+      }
     })
   }
 
@@ -81,7 +83,7 @@ class App extends Component {
     // Board
     return (
       <main>
-        <Route path="/" component={() => <AccountButton username={this.state.username} />} />
+        <Route path="/" component={AccountButton} />
         <Route exact path="/" component={LessonList} />
         <Route path="/lessons/:id/:lessonId" component={Lesson} />
       </main>

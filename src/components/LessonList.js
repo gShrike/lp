@@ -27,7 +27,7 @@ class LessonList extends React.Component {
           <ul className="menu-list">
             {lessonPlans.map(lessonPlan => {
               return (
-                <li key={lessonPlan.id}><Link to={`/lessons/${lessonPlan.lesson.uri}/${lessonPlan.id}`}>{lessonPlan.lesson.name} ({lessonPlan.id})</Link></li>
+                <li key={lessonPlan.id}><Link to={`/lessons/${lessonPlan.lesson.uri}/${lessonPlan.id}`}>{lessonPlan.lesson.name}</Link></li>
               )
             })}
           </ul>
