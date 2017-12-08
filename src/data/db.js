@@ -20,11 +20,11 @@ class DB {
   // ]
   getLessonPlans() {
     return fb.ref(`lessonPlans`).once('value').then(snapshot => {
-      const vals = snapshot.val()
+      const snapVals = snapshot.val()
       const values = []
-      for (const id in vals) {
+      for (const id in snapVals) {
         values.push(
-          createObjectWithId(id, vals[id])
+          createObjectWithId(id, snapVals[id])
         )
       }
       return values
@@ -51,12 +51,24 @@ class DB {
     })
   }
 
-  submitAnswers() {
+  submitAnswersToLessonPlan(answers, lpId) {
+    if (!lpId) {
+      return window.firebase.Promise.reject(`Lesson Plan ID missing`)
+    }
 
+    const promises = answers.map(answer => {
+      return fb.ref(`lessonPlans/${lpId}/submissions`).push().set(answer)
+    })
+
+    return window.firebase.Promise.all(promises)
   }
 
 
 }
+
+/**
+ * Helpers
+ */
 
 // Creates a new object with an `id` property added
 function createObjectWithId(id, snapshotVal) {

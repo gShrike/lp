@@ -3,7 +3,14 @@ import * as Components from '../index'
 
 class Board extends React.Component {
 
-  onSubmit = (e) => {
+  constructor(props) {
+    super(props)
+    this.state = {
+      savingAnswers: false
+    }
+  }
+
+  onSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData(this.refs.form)
@@ -25,10 +32,22 @@ class Board extends React.Component {
       })
     }
 
-    console.log(...answers)
+    this.setState({
+      savingAnswers: true
+    })
+
+    await this.props.onAnswersSubmit(answers)
+
+    this.setState({
+      savingAnswers: false
+    })
+
+    console.log(`Answers:`, ...answers)
   }
 
   render() {
+    const isSavingAnswers = this.state.savingAnswers ? `is-loading` : ``
+
     return (
       <form ref="form" className="section" onSubmit={this.onSubmit}>
         {this.props.cfus.map((cfu, i) => {
@@ -43,7 +62,7 @@ class Board extends React.Component {
             <CFU key={i} {...cfu} {...cfu.config} />
           )
         })}
-        <button className="button is-primary">Submit</button>
+        {this.props.cfus.length ? <button className={`button is-success is-outlined ${isSavingAnswers}`}>Submit</button> : null}
       </form>
     )
   }
@@ -51,7 +70,8 @@ class Board extends React.Component {
 }
 
 Board.defaultProps = {
-  cfus: []
+  cfus: [],
+  onAnswerSubmit() {}
 }
 
 export default Board

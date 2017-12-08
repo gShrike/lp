@@ -28,6 +28,10 @@ class Lesson extends React.Component {
     })
   }
 
+  onAnswersSubmit = async (answers) => {
+    return await db.submitAnswersToLessonPlan(answers, this.state.lessonPlan.id)
+  }
+
   render() {
     if (!this.state.lessonPlan) {
       return <LoadingScreen />
@@ -45,7 +49,7 @@ class Lesson extends React.Component {
           return (
             <section key={i} className="min-content">
               <LessonNav lesson={this.state.lessonPlan.lesson} activeIndex={i} />
-              <Board {...objective} student={account.getUsername()} />
+              <Board {...objective} student={account.getUsername()} onAnswersSubmit={this.onAnswersSubmit} />
             </section>
           )
         })}
