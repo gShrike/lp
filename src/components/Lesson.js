@@ -24,6 +24,17 @@ class Lesson extends React.Component {
       throw new Error(`Lesson Plan "${lessonId}" not found`)
     }
 
+    if (account.isAdmin()) {
+      db.onLessonPlanAnswerSubmission(lessonPlan, submissions => {
+        this.setState({
+          lessonPlan: {
+            ...lessonPlan,
+            submissions
+          }
+        })
+      })
+    }
+
     this.setState({
       lessonPlan
     })
@@ -85,7 +96,7 @@ class Lesson extends React.Component {
           const objectiveSubmissions = this.getSubmissionsForObjective(objective.id)
 
           return (
-            <section key={i} className="min-content">
+            <section key={objective.id} className="min-content">
               <LessonNav lesson={this.state.lessonPlan.lesson} activeIndex={i} />
               {this.renderToggleResultsButton(objective, objectiveSubmissions)}
               {this.renderBoard(objective, objectiveSubmissions)}

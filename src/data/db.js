@@ -63,6 +63,13 @@ class DB {
     return window.firebase.Promise.all(promises)
   }
 
+  onLessonPlanAnswerSubmission(lp, callback) {
+    fb.ref(`lessonPlans/${lp.id}/submissions`).on('value', snapshot => {
+      const submissions = Object.values(snapshot.val())
+      callback(submissions)
+    })
+  }
+
 
 }
 
