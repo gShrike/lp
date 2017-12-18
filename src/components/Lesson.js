@@ -1,6 +1,7 @@
 import React from 'react'
 import LessonNav from './LessonNav'
 import { Board, BoardResults } from './EverybodyWrites'
+import LocalLessons from '../lessons/index'
 import db from '../data/db'
 import account from '../data/account'
 import LoadingScreen from './LoadingScreen'
@@ -18,6 +19,23 @@ class Lesson extends React.Component {
 
   async componentDidMount() {
     const lessonId = this.props.match.params.lessonId
+
+    // We're loading from local lessons instead
+    if (!lessonId) {
+      const lessonUri = this.props.match.params.id
+      const lessonPlan = db.createLessonPlan(LocalLessons[lessonUri], true)
+
+      if (!lessonPlan) {
+        throw new Error(`Lesson Plan "${lessonUri}" not found locally`)
+      }
+
+      this.setState({
+        lessonPlan
+      })
+
+      return
+    }
+
     const lessonPlan = await db.getLessonPlan(lessonId)
 
     if (!lessonPlan) {

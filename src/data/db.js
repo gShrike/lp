@@ -43,12 +43,23 @@ class DB {
     })
   }
 
-  createLessonPlan(lp) {
-    fb.ref(`lessonPlans`).push().set({
-      lesson: createLessonPlanWithId(lp),
+  createLessonPlan(lp, skipSave = false) {
+    const lesson = createLessonPlanWithId(lp)
+    if (!lesson) {
+      return null
+    }
+
+    const lessonPlan = {
+      lesson,
       attendance: [],
       submissions: []
-    })
+    }
+
+    if (skipSave) {
+      return lessonPlan
+    }
+
+    fb.ref(`lessonPlans`).push().set(lessonPlan)
   }
 
   submitAnswersToLessonPlan(answers, lpId) {
@@ -90,6 +101,10 @@ function formatLessonPlan(id, snapshotVal) {
 
 // Create a new lesson plan with ids in place
 function createLessonPlanWithId(lp) {
+  if (!lp) {
+    return null
+  }
+
   return {
     id: uuid(),
     ...lp,
