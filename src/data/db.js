@@ -71,12 +71,19 @@ class DB {
       return fb.ref(`lessonPlans/${lpId}/submissions`).push().set(answer)
     })
 
-    return window.firebase.Promise.all(promises)
+    if (promises.length) {
+      return window.firebase.Promise.all(promises)
+    }
+
+    // If no answers were submitted we resolve immediately
+    return window.firebase.Promise.resolve()
   }
 
   onLessonPlanAnswerSubmission(lp, callback) {
     fb.ref(`lessonPlans/${lp.id}/submissions`).on('value', snapshot => {
-      const submissions = Object.values(snapshot.val())
+      const submissionSnapshot = snapshot.val()
+      const submissions = submissionSnapshot !== null ? Object.values(snapshot.val()) : []
+
       callback(submissions)
     })
   }

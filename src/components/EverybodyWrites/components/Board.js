@@ -16,21 +16,25 @@ class Board extends React.Component {
     const formData = new FormData(this.refs.form)
     const answers = []
 
-    for (const [ cfuId, answer ] of formData.entries()) {
+    this.props.cfus.forEach(cfu => {
+      const correctAnswer = formData.get(`${cfu.id}-answer`)
+      const studentAnswer = formData.get(`${cfu.id}-submission`)
 
-      // Don't include answers
-      if (/-answer$/.test(cfuId)) {
-        continue
+      // Skip if CFU has no correct answer or submission
+      if (correctAnswer === null || studentAnswer === null || studentAnswer === ``) {
+        return
       }
 
-      answers.push({
+      const submission = {
         student: this.props.student,
         objectiveId: this.props.id,
-        cfuId,
-        answer,
-        correct: answer === formData.get(`${cfuId}-answer`)
-      })
-    }
+        cfuId: cfu.id,
+        answer: studentAnswer,
+        correct: studentAnswer === correctAnswer
+      }
+
+      answers.push(submission)
+    })
 
     this.setState({
       savingAnswers: true
@@ -42,6 +46,15 @@ class Board extends React.Component {
       savingAnswers: false
     })
   }
+
+  // onAnswerChange(cfuId, answer) {
+  //   const answers = Object.assign({}, this.state.answers, { [cfuId]: answer })
+  //   console.log(answers)
+  //
+  //   this.setState({
+  //     answers
+  //   })
+  // }
 
   render() {
     const isSavingAnswers = this.state.savingAnswers ? `is-loading` : ``

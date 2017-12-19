@@ -48,7 +48,7 @@ class MultipleChoice extends React.Component {
         <input type="hidden" name={`${this.props.id}-answer`} value={answer} />
         {options.map((option, i) => {
           return (
-            <label key={i} style={styles.label}><input type={this.getInputType()} name={this.props.id} value={option.name} /> <span dangerouslySetInnerHTML={{__html:option.name}}></span></label>
+            <label key={i} style={styles.label}><input type={this.getInputType()} name={`${this.props.id}-submission`} value={option.name} /> <span dangerouslySetInnerHTML={{__html:option.name}}></span></label>
           )
         })}
       </fieldset>
