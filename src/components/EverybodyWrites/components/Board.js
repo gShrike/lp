@@ -47,15 +47,6 @@ class Board extends React.Component {
     })
   }
 
-  // onAnswerChange(cfuId, answer) {
-  //   const answers = Object.assign({}, this.state.answers, { [cfuId]: answer })
-  //   console.log(answers)
-  //
-  //   this.setState({
-  //     answers
-  //   })
-  // }
-
   render() {
     const isSavingAnswers = this.state.savingAnswers ? `is-loading` : ``
 

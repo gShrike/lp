@@ -70,9 +70,17 @@ Orderable.defaultProps = {
 
 class OrderableReview extends React.Component {
 
-  render() {
+  state = {}
+
+  getFormattedSubmissions() {
+    let containsAnswer = false
+
     // Gather submissions with answers
     const submissionsByAnswer = this.props.submissions.reduce((submissionsByAnswer, submission) => {
+      if (submission.correct) {
+        containsAnswer = true
+      }
+
       if (!submissionsByAnswer.hasOwnProperty(submission.answer)) {
         submissionsByAnswer[submission.answer] = {
           correct: submission.correct,
@@ -89,7 +97,26 @@ class OrderableReview extends React.Component {
     // Convert to array and sort DESC
     const submissions = Object.values(submissionsByAnswer).sort((a, b) => a.answers.length < b.answers.length)
 
-    const emptySubmissions = submissions.length ? null : <em>No submissions yet</em>
+    if (!containsAnswer || submissions.length === 0) {
+      const answer = this.props.options.map((o, i) => ++i).join(`,`)
+      const correctSubmission = {
+        correct: true,
+        answer: answer,
+        answers: []
+      }
+
+      submissions.unshift(correctSubmission)
+    }
+
+    return submissions
+  }
+
+  render() {
+    const submissions = this.getFormattedSubmissions()
+
+    if (!submissions) {
+      return null
+    }
 
     return (
       <fieldset className="section">
@@ -99,7 +126,6 @@ class OrderableReview extends React.Component {
             return <li key={option.name}>{option.name}</li>
           })}
         </ol>
-        {emptySubmissions}
         {submissions.map((submission, i) => {
           const isCorrect = submission.correct ? `is-success` : `is-danger`
           return (
