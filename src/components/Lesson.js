@@ -1,6 +1,6 @@
 import React from 'react'
 import LessonNav from './LessonNav'
-import { Board, BoardResults } from './EverybodyWrites'
+import { Board, BoardResults, BoardReview } from './EverybodyWrites'
 import LocalLessons from '../lessons/index'
 import db from '../data/db'
 import account from '../data/account'
@@ -70,6 +70,16 @@ class Lesson extends React.Component {
     return this.state.lessonPlan.submissions.filter(submission => submission.objectiveId === objectiveId)
   }
 
+  getSubmissionsForStudent = () => {
+    if (!this.state.lessonPlan || !this.state.lessonPlan.submissions) {
+      return []
+    }
+
+    const student = account.getUsername()
+
+    return this.state.lessonPlan.submissions.filter(submission => submission.student === student)
+  }
+
   renderBoard = (objective, objectiveSubmissions = []) => {
     if (this.state.resultsView) {
       return <BoardResults {...objective} submissions={objectiveSubmissions} />
@@ -124,7 +134,7 @@ class Lesson extends React.Component {
 
         <section className="min-content">
           <LessonNav lesson={this.state.lessonPlan.lesson} review={true} />
-          {/* Future result information */}
+          <BoardReview lesson={this.state.lessonPlan.lesson} submissions={this.getSubmissionsForStudent()} />
         </section>
       </div>
     )

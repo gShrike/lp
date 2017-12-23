@@ -52,6 +52,7 @@ menu {padding: 0;}
   position: fixed;
   top: 0;
   right: 0;
+  z-index: 500;
   margin: 1em;
 }
 fieldset {
@@ -60,4 +61,20 @@ fieldset {
 
 .orderable-list {
   margin-left: 1em;
+}
+.orderable-list li {
+  cursor: ns-resize;
+}
+.orderable-list.is-result li {
+  cursor: not-allowed;
+}
+
+.pass-fail-icon {
+  color: lightgrey;
+}
+.pass-fail-icon.pass {
+  color: forestgreen;
+}
+.pass-fail-icon.fail {
+  color: firebrick;
 }
