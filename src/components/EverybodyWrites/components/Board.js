@@ -1,79 +1,54 @@
 import React from 'react'
-import * as Components from '../index'
+import { BoardPreview, BoardQuiz, BoardResults } from '../index'
+import account from '../../../data/account'
 
 class Board extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      savingAnswers: false
+
     }
   }
 
-  onSubmit = async (e) => {
-    e.preventDefault()
+  getSubmissionsForObjective = (objectiveId) => {
+    if (!this.props.submissions.length) {
+      return []
+    }
 
-    const formData = new FormData(this.refs.form)
-    const answers = []
+    return this.props.submissions.filter(submission => submission.objectiveId === objectiveId)
+  }
 
-    this.props.cfus.forEach(cfu => {
-      const correctAnswer = formData.get(`${cfu.id}-answer`)
-      const studentAnswer = formData.get(`${cfu.id}-submission`)
+  renderBoard = (mode) => {
+    if (mode === `preview`) {
+      return <BoardPreview {...this.props.objective} />
+    }
 
-      // Skip if CFU has no correct answer or submission
-      if (correctAnswer === null || studentAnswer === null || studentAnswer === ``) {
-        return
-      }
+    if (mode === `quiz`) {
+      return <BoardQuiz {...this.props.objective} student={account.getUsername()} onAnswersSubmit={this.props.onAnswersSubmit} />
+    }
 
-      const submission = {
-        student: this.props.student,
-        objectiveId: this.props.id,
-        cfuId: cfu.id,
-        answer: studentAnswer,
-        correct: studentAnswer === correctAnswer
-      }
+    if (mode === `results`) {
+      return <BoardResults {...this.props.objective} submissions={this.props.submissions} />
+    }
 
-      answers.push(submission)
-    })
-
-    this.setState({
-      savingAnswers: true
-    })
-
-    await this.props.onAnswersSubmit(answers)
-
-    this.setState({
-      savingAnswers: false
-    })
+    return null
   }
 
   render() {
-    const isSavingAnswers = this.state.savingAnswers ? `is-loading` : ``
-
     return (
-      <form ref="form" className="section" onSubmit={this.onSubmit}>
-        {this.props.cfus.map((cfu, i) => {
-          const CFU = Components[cfu.type]
-
-          if (!CFU) {
-            console.error(`Component Not Found: ${cfu.type}`)
-            return null
-          }
-
-          return (
-            <CFU key={i} {...cfu} {...cfu.config} />
-          )
-        })}
-        {this.props.cfus.length ? <button className={`button is-success is-outlined ${isSavingAnswers}`}>Submit</button> : null}
-      </form>
+      <div className="section">
+        {this.renderBoard(this.props.mode)}
+      </div>
     )
   }
 
 }
 
 Board.defaultProps = {
-  cfus: [],
-  onAnswerSubmit() {}
+  mode: `preview`,
+  objective: {},
+  submissions: []
 }
 
 export default Board

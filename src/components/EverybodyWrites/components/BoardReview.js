@@ -1,5 +1,4 @@
 import React from 'react'
-import * as Components from '../index'
 
 class BoardReview extends React.Component {
 
@@ -31,18 +30,10 @@ class BoardReview extends React.Component {
     const attemptedSubmissions = this.getAttemptedSubmissions()
 
     const objectives = this.props.lesson.objectives.map((objective, i) => {
-
-      const submissions = this.getSubmissionsForObjective()
-
       return (
         <section key={objective.id}>
           <h1 className="subtitle">{objective.name}</h1>
           {objective.cfus.map(cfu => {
-            // HACK: Fix for Timer
-            if (cfu.type === `Timer`) {
-              return null
-            }
-
             let status = `unattempted`
 
             if (attemptedSubmissions.hasOwnProperty(cfu.id)) {

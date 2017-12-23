@@ -22,6 +22,10 @@ code { background-color: transparent; padding: 0; }
 /* Don't indent menus */
 menu {padding: 0;}
 
+/* Tabs adjustments */
+.hero.is-dark .tabs a { border-bottom-width: 10px; border-color: #363636; opacity: 0.6 }
+.hero.is-dark .tabs .is-active a { border-color: orange }
+
 .is-strikeout { text-decoration: line-through; }
 .is-padded { padding: 1rem; }
 .is-padded-bottom { padding-bottom: 1rem; }

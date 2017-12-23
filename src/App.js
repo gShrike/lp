@@ -86,7 +86,8 @@ class App extends Component {
         <Route path="/" component={AccountButton} />
         <Route exact path="/" component={LessonList} />
         <Route exact path="/lessons/:id" component={Lesson} />
-        <Route exact path="/lessons/:id/:lessonId" component={Lesson} />
+        <Route exact path="/lessons/:id/:lessonId/" component={Lesson} />
+        <Route exact path="/lessons/:id/:lessonId/:lessonMode" component={Lesson} />
       </main>
     );
   }

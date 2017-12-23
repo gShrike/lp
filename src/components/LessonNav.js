@@ -1,5 +1,12 @@
 import React from 'react'
 import Objectives from './Objectives'
+import { Link } from 'react-router-dom'
+
+const tabs = [
+  { name: `Preview`, uri: `preview` },
+  { name: `Start Quiz`, uri: `quiz` },
+  { name: `Results`, uri: `results`, icon: `fa-pie-chart` }
+]
 
 class LessonNav extends React.Component {
 
@@ -39,18 +46,45 @@ class LessonNav extends React.Component {
     return `start`
   }
 
+  getTabs() {
+    return this.props.tabs.map(tab => {
+      const activeTab = tab.uri === this.props.mode ? `is-active` : ``
+
+      return <li key={tab.uri} className={activeTab}>
+        <Link to={`./${tab.uri}`}>
+          <span className={`fa ${tab.icon}`}></span>
+          {tab.name}
+        </Link>
+      </li>
+    })
+  }
+
   render() {
     const { lesson, activeIndex } = this.props
+    const hiddenFooter = this.props.review ? `is-hidden` : ``
+
     return (
       <section id={this.getPageAnchor()} className="hero is-dark">
         <div className="hero-body">
           {this.getLessonTitle()}
           <Objectives items={lesson.objectives} activeIndex={activeIndex} />
         </div>
+        <div className={`hero-foot ${hiddenFooter}`}>
+          <nav className="tabs is-fullwidth">
+            <ul>
+              {this.getTabs()}
+            </ul>
+          </nav>
+        </div>
       </section>
     )
   }
 
+}
+
+LessonNav.defaultProps = {
+  onToggleResults() {},
+  tabs
 }
 
 export default LessonNav
