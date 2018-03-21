@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import LessonNav from './LessonNav'
 import { Board, BoardReview } from './EverybodyWrites'
 import LocalLessons from '../lessons/index'
@@ -17,7 +18,11 @@ class Lesson extends React.Component {
   }
 
   async componentDidMount() {
-    const lessonId = this.props.match.params.lessonId
+    const { lessonId, lessonMode } = this.props.match.params
+
+    if (!lessonMode && lessonId) {
+      this.props.history.push(`./${lessonId}/preview`)
+    }
 
     // We're loading from local lessons instead
     if (!lessonId) {
@@ -76,16 +81,14 @@ class Lesson extends React.Component {
       return <LoadingScreen />
     }
 
-    const lessonMode = this.props.match.params.lessonMode || `preview`
-
     return (
       <div id="lesson">
 
         {this.state.lessonPlan.lesson.objectives.map((objective, i) => {
           return (
             <section key={objective.id} className="min-content">
-              <LessonNav mode={lessonMode} lesson={this.state.lessonPlan.lesson} activeIndex={i} />
-              <Board mode={lessonMode} objective={objective} onAnswersSubmit={this.onAnswersSubmit} submissions={this.state.lessonPlan.submissions} />
+              <LessonNav mode={this.props.match.params.lessonMode} lesson={this.state.lessonPlan.lesson} activeIndex={i} />
+              <Board mode={this.props.match.params.lessonMode} objective={objective} onAnswersSubmit={this.onAnswersSubmit} submissions={this.state.lessonPlan.submissions} />
             </section>
           )
         })}
@@ -100,4 +103,4 @@ class Lesson extends React.Component {
   }
 }
 
-export default Lesson
+export default withRouter(Lesson)

@@ -65,6 +65,30 @@ class LessonNav extends React.Component {
 
     return (
       <section id={this.getPageAnchor()} className="hero is-dark">
+        <div className="hero-head">
+          <div className="tabs is-fullwidth">
+            <ul>
+              <li>
+                <Link to="/">
+                  <span className="icon"><i className="fa fa-angle-left"></i></span>
+                  <span>Lessons</span>
+                </Link>
+              </li>
+              {/* <li>
+                <a href="/">
+                  <span className="icon"><i className="fa fa-angle-up"></i></span>
+                  <span>Lessons</span>
+                </a>
+              </li> */}
+              {/* <li>
+                <a>
+                  <span>Right</span>
+                  <span className="icon"><i className="fa fa-angle-right"></i></span>
+                </a>
+              </li> */}
+            </ul>
+          </div>
+        </div>
         <div className="hero-body">
           {this.getLessonTitle()}
           <Objectives items={lesson.objectives} activeIndex={activeIndex} />

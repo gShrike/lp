@@ -59,8 +59,7 @@ class App extends Component {
       })
 
       // SEED lesson plans
-      // db.createLessonPlan(lps[0])
-      // db.createLessonPlan(lps[1])
+      // db.createLessonPlan(lps['git-and-github'])
 
     }, (error) => {
       if (error.message) {
