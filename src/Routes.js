@@ -5,7 +5,7 @@ import SubRoutes from './SubRoutes'
 
 function Routes() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <div className="superfluous-routes-div">
         <Route path="/lessons/:id" component={SubRoutes} />
         <Route path="/" component={App} />
