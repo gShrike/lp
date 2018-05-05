@@ -1,6 +1,7 @@
 {
   "name": "lp",
   "version": "0.1.0",
+  "homepage" : "http://gshrike.github.io/lp",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",

@@ -6,7 +6,7 @@ class BoardPreview extends React.Component {
     return (
       <form ref="form" className="section">
         {this.props.cfus.map((cfu, i) => {
-          return <h1 key={cfu.id} className="subtitle">{cfu.title}</h1>
+          return <h1 key={cfu.id} className="subtitle" dangerouslySetInnerHTML={{__html:cfu.title}}></h1>
         })}
       </form>
     )
